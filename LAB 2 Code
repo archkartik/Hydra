@@ -1,0 +1,23 @@
+byte input_letter = 0;
+
+void setup() {
+  pinMode(LED_BUILTIN, OUTPUT);
+  Serial.begin(230400);
+}
+
+
+void loop() {
+  if (Serial.available() > 0)
+  {
+    input_letter = Serial.read();
+    Serial.println(Input);
+    if (input_letter==78)
+  {
+    digitalWrite(LED_BUILTIN, LOW);
+  }
+  else if (input_letter==65)
+  {
+    digitalWrite(LED_BUILTIN, HIGH);
+  }
+}
+}
