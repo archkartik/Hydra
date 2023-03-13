@@ -1,0 +1,23 @@
+String c;
+void setup() 
+{
+  pinMode(LED_BUILTIN, OUTPUT);
+  Serial.begin(19200);
+}
+void loop() 
+{
+  
+  while (Serial.available()> 0) 
+  {
+  c = Serial.readString();
+  Serial.println(c);
+  }
+  if(c.equals("K"))
+  {
+    digitalWrite(LED_BUILTIN,HIGH);
+  }
+  else if(c.equals("I"))
+          {
+    digitalWrite(LED_BUILTIN,LOW);
+  }
+}
