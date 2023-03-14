@@ -1,0 +1,42 @@
+// LAB 3
+//Rohit Suryawanshi
+// SENSOR: RGB LED
+// Aim: Turn on(r) and off (t) the external RGB LED with letter
+
+
+int greenpin = D1;
+int redpin = D2;
+int bluepin = D3;
+byte letter=0;
+
+
+void setup() {
+
+  pinMode(redpin, OUTPUT);
+  pinMode(bluepin, OUTPUT);
+  pinMode(greenpin, OUTPUT);
+  Serial.begin(230400);
+}
+
+void loop() {
+
+ if (Serial.available() > 0)
+  {
+    letter = Serial.read();
+    Serial.println(letter);
+    if (letter==116)
+  {
+    digitalWrite(greenpin,LOW);
+    digitalWrite(redpin,LOW);
+    digitalWrite(bluepin,LOW);
+  }
+  
+  else if (letter=114) 
+  {
+    digitalWrite(redpin,HIGH); //only red on is ON and other are off for this exercise.
+    digitalWrite(greenpin,LOW);
+    digitalWrite(bluepin,LOW);
+  }
+ 
+  }
+}
