@@ -1,4 +1,4 @@
-String c;
+char c;
 void setup() 
 {
   pinMode(LED_BUILTIN, OUTPUT);
@@ -9,14 +9,14 @@ void loop()
   
   while (Serial.available()> 0) 
   {
-  c = Serial.readString();
+  c = Serial.read();
   Serial.println(c);
   }
-  if(c.equals("K"))
+  if(c=='K')
   {
     digitalWrite(LED_BUILTIN,HIGH);
   }
-  else if(c.equals("I"))
+  else if(c=='I')
           {
     digitalWrite(LED_BUILTIN,LOW);
   }
