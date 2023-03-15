@@ -1,28 +1,22 @@
-//Include Wire library to use I2C communication protocl
 #include<Wire.h>
  
 //I2C Address for MPU6050
-const int MPU=0x68;  // Can be 0x69 if AD0 Pin is True (VCC)
+const int MPU=0x68;
 
-//Variables for raw values from MPU ADC
+//Variables for raw values from sensor
 int AcX,AcY,AcZ,GyX,GyY,GyZ;
-int16_t Tmp;
 
 int minVal=0;
-int maxVal=65536; //2^16 levels from MPU6050 ADC 
-
-int offsetTemp = 35; // from MPU datasheet
-int offsetTempLevels = 521; // from MPU datasheet
+int maxVal=65536; //2^16 levels from MPU6050 ADC - data processing
 
 void setup()
 {
-  Serial.begin(9600); // Begin Serial communication
+  Serial.begin(19200); // Begin Serial communication
 
   Wire.begin();
   Wire.beginTransmission(MPU); // begin transmission with MPU address
   Wire.write(0x6B); 
-   
-  //Start MPU-6050 sensor 
+
   Wire.write(0); 
   Wire.endTransmission(true);    
   
@@ -39,7 +33,6 @@ void loop()
   GyX=Wire.read()<<8|Wire.read();  //0x3B (GYRO_XOUT_H) & 0x3C (GYRO_XOUT_L)     
   GyY=Wire.read()<<8|Wire.read();  //0x3D (GYRO_YOUT_H) & 0x3E (GYRO_YOUT_L)
   GyZ=Wire.read()<<8|Wire.read();  //0x3F (GYRO_ZOUT_H) & 0x40 (GYRO_ZOUT_L)
-  Tmp=Wire.read()<<8|Wire.read();  //0x41 (TEMP_OUT_H) & 0x42 (TEMP_OUT_L)
   AcX=Wire.read()<<8|Wire.read();  //0x43 (ACCEL_XOUT_H) & 0x44 (ACCEL_XOUT_L)
   AcY=Wire.read()<<8|Wire.read();  //0x45 (ACCEL_YOUT_H) & 0x46 (ACCEL_YOUT_L)
   AcZ=Wire.read()<<8|Wire.read();  //0x47 (ACCEL_ZOUT_H) & 0x48 (ACCEL_ZOUT_L)
@@ -62,12 +55,7 @@ void loop()
 
   //Send Z axis accelerometer value for serial monitor
   Serial.print(" | AcZ = "); Serial.print(AcZ);
-   
-  //Send Temperature value for serial
-  //Calculates the temperature given the datasheet values (ºC)
-  // 340 is the number of levels per ºC (from datasheet)
-  Serial.print(" | Tmp = "); Serial.print(float(Tmp + offsetTempLevels)/340 + offsetTemp);
-   
+  
   //Send X axis gyroscope angle value for serial monitor
   Serial.print(" | GyX = "); Serial.print(xAng);
 
@@ -79,7 +67,6 @@ void loop()
   //Send Z axis gyroscope angle value for serial monitor
   Serial.print(" | GyZ = "); Serial.println(zAng);
  
-   
-  //Wait 300 ms, after that, start new measurement and display.
-  delay(300);
+  //Wait 1000 ms, after that, start new measurement and display.
+  delay(1000);
 }
