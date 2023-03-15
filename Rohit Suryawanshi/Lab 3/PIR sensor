@@ -1,7 +1,7 @@
 // LAB 3
 //Rohit Suryawanshi
 // SENSOR: PIR sensor (NOT in our flow chart)
-// Aim: Turn on the external RGB LEDwhen motion is detected and turn it off when ended. 
+// Aim: Turn on the external RGB LED when motion is detected and turn it off when ended. 
 
 
 int pirPin = D1;          
@@ -25,7 +25,7 @@ void setup() {
 void loop() {
   val=digitalRead(pirPin);
   if (val==HIGH){
-    digitalWrite(redpin, HIGH);
+    digitalWrite(redpin, HIGH); //only red light used for this exercise. 
     if (pirState==LOW){
       Serial.println("motion of human detected!");
       pirState=HIGH;
@@ -33,7 +33,7 @@ void loop() {
   } else {
     digitalWrite(redpin, LOW);
     if(pirState==HIGH){
-      Serial.println("motion ended!");
+      Serial.println("NO more motion now!!!");
       pirState=LOW;
     }
   }
