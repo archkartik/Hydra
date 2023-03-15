@@ -1,9 +1,3 @@
-#include <ESP8266WiFi.h>
-#include <Servo.h>
-static const int ServoGPIO = D4;
-const char* ssid = "MIWIFI_2G_9Eqf"; 
-const char* password = "RhTPHCjk";
-
 #include <ESP8266WiFi.h> 
 #include <Servo.h>
 
