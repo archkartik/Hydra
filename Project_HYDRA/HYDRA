@@ -1,0 +1,110 @@
+#include "dweetESP8266.h"
+
+#define THIG_NAME "ie4tgroup_hydra_17_lab5"
+
+const char* ssid = "Vodafone";
+const char* password = "0987654321";
+dweet DweetClient;
+char* key = "Distance";
+char* led_status = "LedStatus";
+char* buzzer_status = "BuzzerStatus";
+
+
+const int trigPin = D2;
+const int echoPin = D1;
+const int buzzer = D3;
+const int greenpin = D5;
+const int redpin = D6;
+const int bluepin = D7;
+
+// defines variables
+long duration;
+int distance;
+int safetyDistance;
+
+void setup() {
+  pinMode(trigPin, OUTPUT);  // Sets the trigPin as an Output
+  pinMode(echoPin, INPUT);   // Sets the echoPin as an Input
+  pinMode(buzzer, OUTPUT);
+  pinMode(redpin, OUTPUT);
+  pinMode(bluepin, OUTPUT);
+  pinMode(greenpin, OUTPUT);
+  Serial.begin(9600);  // Starts the serial communication
+
+  Serial.println();
+  Serial.println();
+  Serial.print("connecting to ");
+  Serial.println(ssid);
+  WiFi.begin(ssid, password);
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(50);
+    Serial.print(".");
+  }
+  Serial.println("");
+  Serial.println("WIFI Conneted :");
+  Serial.println("IP Address");
+  Serial.println(WiFi.localIP());
+}
+
+char val[16];
+
+void loop() {
+  // Clears the trigPin
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
+
+  // trigPin on HIGH state for 10 micro seconds
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+
+  // Reads the echoPin, returns the sound wave travel time in microseconds
+  duration = pulseIn(echoPin, HIGH);
+
+  // Calculating the distance
+  distance = duration * 0.034 / 2;
+
+  safetyDistance = distance;
+  if (safetyDistance < 5) {
+    digitalWrite(buzzer, HIGH);
+    digitalWrite(redpin, HIGH);
+    digitalWrite(greenpin, LOW);
+    digitalWrite(bluepin, LOW);
+    DweetClient.add(led_status, "Red_Danger"); 
+    DweetClient.add(buzzer_status, "ON");
+  } else if (safetyDistance < 12) {
+    digitalWrite(buzzer, LOW);
+    digitalWrite(redpin, LOW);
+    digitalWrite(greenpin, LOW);
+    digitalWrite(bluepin, HIGH);
+    DweetClient.add(led_status, "Blue");
+  } else if (safetyDistance < 20) {
+    digitalWrite(buzzer, LOW);
+    digitalWrite(redpin, LOW);
+    digitalWrite(greenpin, HIGH);
+    digitalWrite(bluepin, LOW);
+    DweetClient.add(led_status, "Green");
+  } else {
+    digitalWrite(buzzer, LOW);
+    digitalWrite(redpin, LOW);
+    digitalWrite(greenpin, LOW);
+    digitalWrite(bluepin, LOW);
+    DweetClient.add(led_status, "Off");
+    DweetClient.add(buzzer_status, "OFF");
+  }
+
+  // Prints the distance on the Serial Monitor
+  Serial.print("Distance: ");
+  Serial.println(distance);
+  Serial.println(" cm");
+
+  dtostrf(distance, 4, 2, val); //convert a float value into a char array
+  Serial.println(val);
+  DweetClient.add(key, val);
+  DweetClient.add("Led_Status", led_status);
+  DweetClient.add("Buzzer_Status", buzzer_status);
+  DweetClient.sendAll(THIG_NAME);
+
+  // every 1 sec a new value is uploaded 
+  delay(1000);  
+}
