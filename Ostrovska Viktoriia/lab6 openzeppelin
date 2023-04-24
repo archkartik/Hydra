@@ -1,0 +1,27 @@
+pragma solidity ^0.8.0;
+
+import "@openzeppelin/contracts/utils/math/SafeMath.sol";
+
+contract MathContract {
+    using SafeMath for uint256;
+
+    function add(uint256 a, uint256 b) public pure returns (uint256) {
+        return a.add(b);
+    }
+
+    function sub(uint256 a, uint256 b) public pure returns (uint256) {
+        return a.sub(b);
+    }
+
+    function mul(uint256 a, uint256 b) public pure returns (uint256) {
+        return a.mul(b);
+    }
+
+    function div(uint256 a, uint256 b) public pure returns (uint256) {
+        return a.div(b);
+    }
+
+    function mod(uint256 a, uint256 b) public pure returns (uint256) {
+        return a.mod(b);
+    }
+}
