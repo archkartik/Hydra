@@ -1,0 +1,12 @@
+//Lab6 - exercise 13
+
+//SPDX-License-Identifier: GPL-3.0
+pragma solidity ^0.8.0;
+
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+
+contract I4ET_Token is ERC20 {
+    constructor(uint256 initialSupply) ERC20("I4ET_Token", "I4ET") {
+        _mint(msg.sender, initialSupply);
+    }
+}
